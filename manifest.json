@@ -1,0 +1,18 @@
+{
+	"manifest_version": 2,
+	"name": "Permanent History",
+	"version": "0.2",
+
+	"description": "yooo",
+
+	"background": {
+		"page": "background.html"
+	},
+	"permissions": ["history", "alarms", "storage"],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "{f764f097-3a23-4a2e-bea7-74ea11377b51}",
+			"strict_min_version": "42.0"
+		}
+	}
+}
