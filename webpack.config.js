@@ -1,15 +1,10 @@
-const WebextensionPlugin = require("webpack-webextension-plugin")
-
 module.exports = {
 	mode: "development",
 	devtool: "source-map",
-	plugins: [
-		new WebextensionPlugin({
-			vendor: "chrome",
-		}),
-	],
+
 	entry: {
 		background: "./src/main.ts",
+		overview: "./src/gui.tsx",
 	},
 	module: {
 		rules: [

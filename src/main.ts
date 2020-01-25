@@ -1,6 +1,6 @@
 import Dexie from "dexie"
 import * as exin from "dexie-export-import"
-
+;(Dexie as any).debug = true
 class HistoryDb extends Dexie {
 	pages: Dexie.Table<browser.history.HistoryItem, string>
 	visits: Dexie.Table<browser.history.VisitItem, string>
@@ -11,6 +11,10 @@ class HistoryDb extends Dexie {
 			visits: "visitId",
 			pages: "id",
 		})
+		this.version(2).stores({
+			visits: "visitId,id,visitTime",
+			pages: "id",
+		})
 		this.visits = this.table("visits")
 		this.pages = this.table("pages")
 	}
@@ -19,15 +23,22 @@ class HistoryDb extends Dexie {
 const db = new HistoryDb()
 
 async function updateHistoryDatabase() {
+	if (!db.isOpen()) {
+		console.log("opening/upgrading db...")
+		await db.open()
+		console.log("open!")
+	}
+
 	const result = await browser.history.search({
 		text: "",
 		startTime: 0,
 		maxResults: Number.MAX_SAFE_INTEGER,
 	})
-	console.log("adding", result.length)
+	console.log("adding pages", result.length)
 	console.time("pages")
 	await db.pages.bulkPut(result)
 	console.timeEnd("pages")
+	console.log("adding visits")
 	console.time("getvisits")
 	const visits: browser.history.VisitItem[] = []
 	for (const x of result) {
@@ -73,13 +84,17 @@ window.addEventListener("unhandledrejection", event => {
 
 updateIfTooOld()
 
-Object.assign(window, {
-	permanentHistory: {
-		updateIfTooOld,
-		updateHistoryDatabase,
-		db,
-		HistoryDb,
-		Dexie,
-		exin,
-	},
+console.log("global variable: permanentHistory")
+const api = {
+	updateIfTooOld,
+	updateHistoryDatabase,
+	db,
+	HistoryDb,
+	Dexie,
+	exin,
+}
+browser.browserAction.onClicked.addListener(() => {
+	browser.tabs.create({ url: "overview.html" })
 })
+export type apiType = typeof api
+Object.assign(window, { permanentHistory: api })

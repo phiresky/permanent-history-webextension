@@ -1,18 +1,20 @@
 {
 	"scripts": {
-		"build": "yarn web-ext build --config web-ext.config.js"
+		"build": "yarn webpack && yarn web-ext build --config web-ext.config.js"
 	},
 	"dependencies": {
 		"@types/firefox-webext-browser": "^70.0.1",
 		"@types/react": "^16.9.11",
+		"@types/react-cache": "^2.0.1",
 		"@types/react-dom": "^16.9.4",
 		"dexie": "^2.0.4",
 		"dexie-export-import": "^1.0.0-beta.14",
 		"eslint": "^6.6.0",
 		"mobx": "^5.14.2",
 		"mobx-react-lite": "^1.5.0",
-		"react": "^16.11.0",
-		"react-dom": "^16.11.0",
+		"react": "^0.0.0-experimental-f6b8d31a7",
+		"react-cache": "^2.0.0-alpha.1",
+		"react-dom": "^0.0.0-experimental-f6b8d31a7",
 		"ts-loader": "^6.2.1",
 		"ts-node": "^8.4.1",
 		"web-ext": "^3.2.1",
